@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NDUR | Dashboard</title>
+    <title>NDUR | Camera Setup</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,12 +21,12 @@
         body, html {
             height: 100%;
             width: 100%;
-            overflow: hidden; /* Prevents scrolling on the main page */
+            overflow: hidden;
+            background-color: #000; /* Black background fallback */
         }
 
         /* --- 2. BACKGROUND IMAGE --- */
         body {
-            /* Make sure bg-app.jpg is in the same folder! */
             background-image: url('bg-app.jpg');
             background-size: cover;
             background-position: center;
@@ -36,32 +36,32 @@
 
         /* --- 3. DARK OVERLAY --- */
         .overlay {
-            background-color: rgba(0, 0, 0, 0.75); /* Dark overlay to make text readable */
+            background-color: rgba(0, 0, 0, 0.85); /* Darker for camera focus */
             height: 100%;
             width: 100%;
             display: flex;
             flex-direction: column;
-            overflow-y: auto; /* Allows scrolling if content is too tall */
+            overflow-y: auto;
         }
 
-        /* --- 4. NAVIGATION (Centered Logo) --- */
+        /* --- 4. NAVIGATION --- */
         nav {
             display: flex;
-            justify-content: center; /* Centers items horizontally */
+            justify-content: center;
             align-items: center;
-            padding: 25px 0;
+            padding: 20px 0;
             border-bottom: 1px solid rgba(255, 0, 0, 0.3);
             flex-shrink: 0;
+            background: rgba(0,0,0,0.5);
         }
 
-        /* CONTROL THE LOGO SIZE HERE */
         .logo-img {
-            height: 50px; /* Fixed height so it doesn't get huge */
-            width: auto;  /* Width adjusts automatically */
+            height: 45px;
+            width: auto;
             display: block;
         }
 
-        /* --- 5. SECTIONS (Landing & Dashboard) --- */
+        /* --- 5. SECTIONS --- */
         .section-container {
             flex: 1;
             display: flex;
@@ -73,12 +73,11 @@
             width: 100%;
         }
 
-        /* Utility Class to Hide Elements */
         .hidden {
             display: none !important;
         }
 
-        /* --- 6. LANDING PAGE TYPOGRAPHY --- */
+        /* --- 6. LANDING PAGE --- */
         h1 {
             font-size: 5rem;
             font-weight: 900;
@@ -89,21 +88,18 @@
             letter-spacing: -2px;
         }
 
-        h1 span {
-            color: #ff0000; /* Red Color */
-        }
+        h1 span { color: #ff0000; }
 
         .subtitle {
             font-size: 1.5rem;
             color: #ddd;
             margin-bottom: 40px;
-            font-weight: 400;
         }
 
-        /* --- 7. DASHBOARD FORM STYLES --- */
+        /* --- 7. FORM STYLES --- */
         .dashboard-box {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 0, 0, 0.4);
             padding: 40px;
             border-radius: 8px;
             width: 100%;
@@ -143,10 +139,7 @@
             outline: none;
         }
 
-        .form-input:focus {
-            border-color: #ff0000;
-            background: rgba(255, 255, 255, 0.15);
-        }
+        .form-input:focus { border-color: #ff0000; }
 
         /* --- 8. BUTTONS --- */
         .btn-red {
@@ -160,8 +153,8 @@
             border-radius: 5px;
             cursor: pointer;
             box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
-            transition: transform 0.2s, background-color 0.2s;
-            margin-top: 10px;
+            transition: 0.2s;
+            margin-top: 20px;
         }
 
         .btn-red:hover {
@@ -169,7 +162,69 @@
             transform: translateY(-2px);
         }
 
-        /* Mobile Responsiveness */
+        /* --- 9. CAMERA UI STYLES --- */
+        .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            background: #000;
+            border: 2px solid #ff0000;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.2);
+        }
+
+        /* The actual video element */
+        video {
+            width: 100%;
+            height: auto;
+            display: block;
+            transform: scaleX(-1); /* Mirrors the camera like a mirror */
+        }
+
+        /* Overlay text on camera */
+        .camera-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 5px 15px;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            border-radius: 4px;
+        }
+
+        .recording-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .rec-dot {
+            height: 15px;
+            width: 15px;
+            background-color: red;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
             h1 { font-size: 3.5rem; }
             .logo-img { height: 40px; }
@@ -188,20 +243,19 @@
         <div id="landing-section" class="section-container">
             <h1>Push Your <br><span>Limits</span></h1>
             <p class="subtitle">Track your Running Movement with NDÜR</p>
-            <button class="btn-red" onclick="goToDashboard()">Start Running</button>
+            <button class="btn-red" onclick="switchView('dashboard-section')">Start Running</button>
         </div>
 
         <div id="dashboard-section" class="section-container hidden">
             <div class="dashboard-box">
                 <h2>Dashboard</h2>
-                <p style="color: #aaa; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem;">
+                <p style="color: #aaa; margin-bottom: 20px; text-transform: uppercase; font-size: 0.9rem;">
                     3 Side View of NDÜR
                 </p>
 
-                <form onsubmit="event.preventDefault(); alert('Camera Setup Initializing...');">
-                    
+                <form id="setup-form" onsubmit="handleFormSubmit(event)">
                     <label class="form-label">Subject Name</label>
-                    <input type="text" class="form-input" placeholder="Enter Full Name" required>
+                    <input type="text" class="form-input" id="subject-name" placeholder="Enter Full Name" required>
 
                     <label class="form-label">D.O.B</label>
                     <input type="date" class="form-input" required>
@@ -212,7 +266,6 @@
                     <label class="form-label">Phone Number</label>
                     <input type="tel" class="form-input" placeholder="+1 234 567 8900" required>
 
-                    <br><br>
                     <button type="submit" class="btn-red" style="width: 100%;">
                         Setup Camera View to Run
                     </button>
@@ -220,14 +273,81 @@
             </div>
         </div>
 
+        <div id="camera-section" class="section-container hidden">
+            
+            <h2 style="font-size: 1.5rem; border: none; margin-bottom: 10px;">
+                Subject: <span id="display-name" style="color:#ff0000;">Runner</span>
+            </h2>
+
+            <div class="camera-container">
+                <video id="webcam" autoplay playsinline></video>
+                
+                <div class="camera-overlay">Left Side View</div>
+                <div class="recording-indicator">
+                    <div class="rec-dot"></div> REC
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 20px;">
+                <button class="btn-red" style="background: #333;" onclick="stopCamera()">Stop</button>
+                <button class="btn-red">Start Analysis</button>
+            </div>
+
+        </div>
+
     </div>
 
     <script>
-        function goToDashboard() {
-            // Hide the Landing Section
-            document.getElementById('landing-section').classList.add('hidden');
-            // Show the Dashboard Section
-            document.getElementById('dashboard-section').classList.remove('hidden');
+        // Function to switch between screens
+        function switchView(viewId) {
+            // Hide all sections
+            document.querySelectorAll('.section-container').forEach(el => el.classList.add('hidden'));
+            // Show the target section
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        // Handle Form Submission
+        function handleFormSubmit(event) {
+            event.preventDefault(); // Stop page reload
+            
+            // Get the name to display on the camera screen
+            const name = document.getElementById('subject-name').value;
+            document.getElementById('display-name').textContent = name;
+
+            // Switch to Camera View
+            switchView('camera-section');
+            
+            // Turn on the Camera
+            startCamera();
+        }
+
+        // Function to Access Webcam
+        function startCamera() {
+            const video = document.getElementById('webcam');
+            
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then(function (stream) {
+                        video.srcObject = stream;
+                    })
+                    .catch(function (error) {
+                        console.log("Something went wrong!", error);
+                        alert("Camera not accessible. Please allow camera permissions.");
+                    });
+            }
+        }
+
+        // Function to Stop Camera (Optional, saves battery)
+        function stopCamera() {
+            const video = document.getElementById('webcam');
+            const stream = video.srcObject;
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                video.srcObject = null;
+            }
+            // Go back to dashboard
+            switchView('dashboard-section');
         }
     </script>
 
