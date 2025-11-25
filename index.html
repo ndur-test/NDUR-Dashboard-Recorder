@@ -9,231 +9,115 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
 
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ndurRed: '#ff0000',     /* Custom Red */
+                        ndurDarkRed: '#cc0000', /* Darker Red for hover */
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glow': '0 4px 20px rgba(255, 0, 0, 0.4)',
+                        'glow-hover': '0 6px 25px rgba(255, 0, 0, 0.6)',
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        /* --- RESET & BASE STYLES --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body, html {
-            height: 100%;
-            width: 100%;
-            overflow: hidden; /* Prevents scrolling */
-        }
-
-        /* --- BACKGROUND IMAGE SETUP --- */
-        body {
+        /* Custom CSS strictly for Background Image */
+        .bg-custom {
             background-image: url('bg-app.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-
-        /* --- DARK OVERLAY --- */
-        .overlay {
-            background: rgba(0, 0, 0, 0.80); /* Slightly darker for better form readability */
-            height: 100%;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            color: white;
-            overflow-y: auto; /* Allows scrolling if form is tall */
-        }
-
-        /* --- NAVIGATION --- */
-        nav {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            padding: 20px 50px;
-            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
-            flex-shrink: 0;
-        }
-
-        .logo-img {
-            height: 40px;
-            width: auto;
-            display: block;
-        }
-
-        /* --- SHARED CONTAINER STYLES --- */
-        .container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* --- LANDING PAGE STYLES --- */
-        h1 {
-            font-size: 4.5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            line-height: 1.1;
-            letter-spacing: -2px;
-        }
-
-        h1 span { color: #ff0000; }
-
-        p {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 40px;
-            color: #ddd;
-            max-width: 700px;
-            line-height: 1.6;
-        }
-
-        /* --- DASHBOARD STYLES --- */
-        .dashboard-box {
-            background: rgba(0, 0, 0, 0.6); /* Semi-transparent box */
-            border: 1px solid rgba(255, 0, 0, 0.3);
-            padding: 40px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 500px;
-            backdrop-filter: blur(5px);
-        }
-
-        h2 {
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            margin-bottom: 30px;
-            color: white;
-            border-bottom: 2px solid #ff0000;
-            padding-bottom: 10px;
-            display: inline-block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            color: #ff0000;
-            margin-bottom: 5px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #444;
-            color: white;
-            border-radius: 4px;
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-        }
-
-        .form-group input:focus {
-            border-color: #ff0000;
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        /* --- BUTTONS --- */
-        .cta-button {
-            padding: 18px 45px;
-            font-size: 1.1rem;
-            background-color: #ff0000;
-            color: white;
-            border: none;
-            font-weight: 800;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 4px;
-            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.4);
-            transition: all 0.2s ease;
-            letter-spacing: 1px;
-            margin-top: 10px;
-        }
-
-        .cta-button:hover {
-            transform: translateY(-2px);
-            background-color: #cc0000;
-            box-shadow: 0 6px 25px rgba(255, 0, 0, 0.6);
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* --- RESPONSIVENESS --- */
-        @media (max-width: 768px) {
-            h1 { font-size: 3rem; }
-            nav { justify-content: center; }
-            .dashboard-box { padding: 20px; width: 100%; }
-            h2 { font-size: 1.4rem; }
         }
     </style>
 </head>
-<body>
+<body class="h-screen w-full overflow-hidden bg-custom bg-cover bg-center bg-fixed text-white font-sans">
 
-    <div class="overlay">
-        <nav>
-            <img src="white logo ndur small.png" alt="NDUR Logo" class="logo-img">
+    <div class="bg-black/80 h-full w-full flex flex-col overflow-y-auto">
+
+        <nav class="flex justify-start items-center px-6 py-5 md:px-12 border-b border-red-500/20 shrink-0">
+            <img src="white logo ndur small.png" alt="NDUR Logo" class="h-10 w-auto block">
         </nav>
 
-        <div id="landing-section" class="container">
-            <h1>Push Your <br><span>Limits</span></h1>
-            <p>Track your Running Movement with NDÜR</p>
-            <button class="cta-button" onclick="goToDashboard()">Start Running</button>
+        <div id="landing-section" class="flex-1 flex flex-col justify-center items-center text-center p-5 w-full max-w-7xl mx-auto">
+            
+            <h1 class="text-5xl md:text-7xl font-black uppercase mb-4 leading-none tracking-tighter">
+                Push Your <br><span class="text-ndurRed">Limits</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl font-normal mb-10 text-gray-300 max-w-2xl leading-relaxed">
+                Track your Running Movement with NDÜR
+            </p>
+            
+            <button onclick="goToDashboard()" 
+                class="px-10 py-4 text-lg bg-ndurRed text-white font-extrabold uppercase rounded shadow-glow 
+                       hover:-translate-y-0.5 hover:bg-ndurDarkRed hover:shadow-glow-hover transition-all duration-200 tracking-wider">
+                Start Running
+            </button>
         </div>
 
-        <div id="dashboard-section" class="container hidden">
-            <div class="dashboard-box">
-                <h2>Dashboard of 3 Side View of NDÜR</h2>
+        <div id="dashboard-section" class="hidden flex-1 flex flex-col justify-center items-center text-center p-5 w-full">
+            
+            <div class="bg-black/60 border border-red-500/30 p-8 rounded-lg w-full max-w-lg backdrop-blur-sm">
                 
+                <h2 class="text-2xl md:text-3xl uppercase mb-8 text-white border-b-2 border-ndurRed pb-2 inline-block font-bold">
+                    Dashboard
+                </h2>
+                
+                <p class="text-gray-400 text-sm uppercase tracking-widest mb-6">3 Side View of NDÜR</p>
+
                 <form onsubmit="event.preventDefault(); alert('Camera Setup Initializing...');">
-                    <div class="form-group">
-                        <label>Subject Name</label>
-                        <input type="text" placeholder="Enter Full Name" required>
+                    
+                    <div class="mb-5 text-left">
+                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Subject Name</label>
+                        <input type="text" placeholder="Enter Full Name" required 
+                               class="w-full p-3 bg-white/10 border border-gray-600 text-white rounded focus:border-ndurRed focus:bg-white/20 outline-none transition duration-300">
                     </div>
 
-                    <div class="form-group">
-                        <label>Date of Birth</label>
-                        <input type="date" required>
+                    <div class="mb-5 text-left">
+                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">D.O.B</label>
+                        <input type="date" required 
+                               class="w-full p-3 bg-white/10 border border-gray-600 text-white rounded focus:border-ndurRed focus:bg-white/20 outline-none transition duration-300 placeholder-gray-400">
                     </div>
 
-                    <div class="form-group">
-                        <label>Age</label>
-                        <input type="number" placeholder="25" required>
+                    <div class="mb-5 text-left">
+                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Age</label>
+                        <input type="number" placeholder="25" required 
+                               class="w-full p-3 bg-white/10 border border-gray-600 text-white rounded focus:border-ndurRed focus:bg-white/20 outline-none transition duration-300">
                     </div>
 
-                    <div class="form-group">
-                        <label>Phone Number</label>
-                        <input type="tel" placeholder="+1 234 567 8900" required>
+                    <div class="mb-8 text-left">
+                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Phone Number</label>
+                        <input type="tel" placeholder="+1 234 567 8900" required 
+                               class="w-full p-3 bg-white/10 border border-gray-600 text-white rounded focus:border-ndurRed focus:bg-white/20 outline-none transition duration-300">
                     </div>
 
-                    <button type="submit" class="cta-button" style="width: 100%;">
+                    <button type="submit" 
+                        class="w-full py-4 text-lg bg-ndurRed text-white font-extrabold uppercase rounded shadow-glow 
+                               hover:-translate-y-0.5 hover:bg-ndurDarkRed hover:shadow-glow-hover transition-all duration-200 tracking-wider">
                         Setup Camera View to Run
                     </button>
                 </form>
             </div>
         </div>
+
     </div>
 
     <script>
         function goToDashboard() {
-            // Hide Landing
-            document.getElementById('landing-section').classList.add('hidden');
-            // Show Dashboard
-            document.getElementById('dashboard-section').classList.remove('hidden');
+            const landing = document.getElementById('landing-section');
+            const dashboard = document.getElementById('dashboard-section');
+
+            // Add 'hidden' class to landing, remove it from dashboard
+            landing.classList.add('hidden');
+            dashboard.classList.remove('hidden');
         }
     </script>
 
