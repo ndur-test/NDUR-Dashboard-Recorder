@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NDUR | Multi-Camera Setup</title>
+    <title>NDUR | 3-Camera Setup</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -169,14 +169,14 @@
             max-width: 1400px;
             gap: 20px;
             justify-content: center;
-            flex-wrap: wrap; /* Wraps to next line on small screens */
+            flex-wrap: wrap; 
             padding-top: 20px;
         }
 
         .camera-card {
             position: relative;
-            flex: 1; /* Allows them to grow equally */
-            min-width: 300px; /* Minimum width before wrapping */
+            flex: 1;
+            min-width: 300px;
             background: #000;
             border: 2px solid #333;
             border-radius: 8px;
@@ -185,21 +185,17 @@
             transition: border-color 0.3s;
         }
 
-        .camera-card:hover {
-            border-color: #ff0000; /* Glows red when you hover */
-        }
+        .camera-card:hover { border-color: #ff0000; }
 
-        /* The actual video element */
         video {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures video fills the square */
+            object-fit: cover;
             display: block;
-            transform: scaleX(-1); /* Mirror effect */
-            background: #111; /* Placeholder color */
+            transform: scaleX(-1);
+            background: #111;
         }
 
-        /* Overlay text on camera */
         .camera-overlay {
             position: absolute;
             top: 15px;
@@ -248,7 +244,7 @@
             h1 { font-size: 3.5rem; }
             .logo-img { height: 40px; }
             .dashboard-box { padding: 20px; }
-            .camera-grid { flex-direction: column; } /* Stack vertically on phone */
+            .camera-grid { flex-direction: column; }
             .camera-card { width: 100%; min-height: 250px; }
         }
     </style>
@@ -345,46 +341,89 @@
             const name = document.getElementById('subject-name').value;
             document.getElementById('display-name').textContent = name;
             switchView('camera-section');
+            
+            // Start the multi-camera logic
             startMultiCamera();
         }
 
-        function startMultiCamera() {
-            // We select ALL 3 video elements
+        async function startMultiCamera() {
             const videoLeft = document.getElementById('webcam-left');
             const videoBack = document.getElementById('webcam-back');
             const videoRight = document.getElementById('webcam-right');
-            
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({ video: true })
-                    .then(function (stream) {
-                        // We feed the SAME stream to all 3 monitors for the UI Demo
-                        videoLeft.srcObject = stream;
-                        videoBack.srcObject = stream;
-                        videoRight.srcObject = stream;
-                    })
-                    .catch(function (error) {
-                        console.log("Error accessing camera:", error);
-                        alert("Camera not accessible. Please allow camera permissions.");
-                    });
+
+            try {
+                // 1. First, ask for generic permission to get access to labels/IDs
+                await navigator.mediaDevices.getUserMedia({ video: true });
+
+                // 2. Enumerate all devices
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                // Filter specifically for video inputs (cameras)
+                const videoDevices = devices.filter(device => device.kind === 'videoinput');
+
+                console.log("Cameras found:", videoDevices.length);
+
+                if (videoDevices.length === 0) {
+                    alert("No cameras detected!");
+                    return;
+                }
+
+                // 3. Helper function to assign a specific camera ID to a video element
+                const assignCamera = async (videoElement, deviceId) => {
+                    try {
+                        const stream = await navigator.mediaDevices.getUserMedia({
+                            video: { deviceId: { exact: deviceId } }
+                        });
+                        videoElement.srcObject = stream;
+                    } catch (err) {
+                        console.error("Error assigning camera:", err);
+                    }
+                };
+
+                // 4. Assign Cameras automatically
+                // Camera 1 -> Left Screen
+                if (videoDevices[0]) {
+                    assignCamera(videoLeft, videoDevices[0].deviceId);
+                }
+
+                // Camera 2 -> Back Screen
+                if (videoDevices[1]) {
+                    assignCamera(videoBack, videoDevices[1].deviceId);
+                } else {
+                    // If you don't have a 2nd camera, reuse the 1st one so the UI isn't blank
+                    console.log("Camera 2 not found, using Camera 1");
+                    assignCamera(videoBack, videoDevices[0].deviceId);
+                }
+
+                // Camera 3 -> Right Screen
+                if (videoDevices[2]) {
+                    assignCamera(videoRight, videoDevices[2].deviceId);
+                } else {
+                    // If you don't have a 3rd camera, reuse the 1st one
+                    console.log("Camera 3 not found, using Camera 1");
+                    assignCamera(videoRight, videoDevices[0].deviceId);
+                }
+
+            } catch (error) {
+                console.error("Error accessing media devices.", error);
+                alert("Please allow camera access to use this feature.");
             }
         }
 
         function stopCamera() {
+            // Stop streams for all video elements
             const videos = [
                 document.getElementById('webcam-left'),
                 document.getElementById('webcam-back'),
                 document.getElementById('webcam-right')
             ];
 
-            // Stop the stream on the first video (since they share the same source)
-            if (videos[0].srcObject) {
-                const stream = videos[0].srcObject;
-                const tracks = stream.getTracks();
-                tracks.forEach(track => track.stop());
-            }
-
-            // Clear all sources
-            videos.forEach(vid => vid.srcObject = null);
+            videos.forEach(video => {
+                if (video.srcObject) {
+                    const tracks = video.srcObject.getTracks();
+                    tracks.forEach(track => track.stop());
+                    video.srcObject = null;
+                }
+            });
 
             switchView('dashboard-section');
         }
