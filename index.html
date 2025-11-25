@@ -35,14 +35,14 @@
             background-attachment: fixed;
             background-repeat: no-repeat;
             color: #F9FAFB;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden; 
         }
 
         /* Dark Overlay */
         .app-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.85); /* Dark background for readability */
+            background: rgba(0,0,0,0.85);
             z-index: 0;
         }
 
@@ -91,7 +91,7 @@
             overflow: hidden;
         }
         .view-slot.occupied {
-            border: 2px solid #ef4444; /* Red border when active */
+            border: 2px solid #ef4444;
             padding: 0;
             background: black;
         }
@@ -135,16 +135,18 @@
                         <input type="text" id="form-name" placeholder="Enter Full Name" required 
                                class="w-full bg-white/5 border border-gray-600 rounded p-3 text-white focus:border-ndurRed focus:outline-none transition-colors">
                     </div>
+                    
                     <div>
                         <label class="block text-ndurRed text-xs font-bold uppercase mb-1">D.O.B</label>
-                        <input type="date" required 
+                        <input type="date" id="dob-input" required onchange="calculateAge()"
                                class="w-full bg-white/5 border border-gray-600 rounded p-3 text-white focus:border-ndurRed focus:outline-none transition-colors">
                     </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Age</label>
-                            <input type="number" placeholder="25" required 
-                                   class="w-full bg-white/5 border border-gray-600 rounded p-3 text-white focus:border-ndurRed focus:outline-none transition-colors">
+                            <input type="number" id="age-input" placeholder="Auto" readonly 
+                                   class="w-full bg-gray-800 border border-gray-600 rounded p-3 text-gray-400 cursor-not-allowed focus:outline-none">
                         </div>
                         <div>
                             <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Phone</label>
@@ -259,7 +261,6 @@
         <div class="video-card flex flex-col h-full w-full bg-gray-900 overflow-hidden">
             <div class="video-wrapper relative flex-grow bg-black flex items-center justify-center overflow-hidden group">
                 <video autoplay playsinline muted class="h-full w-full object-contain"></video>
-                
                 <div class="absolute top-0 left-0 w-full p-2 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <span class="camera-label text-white text-[10px] font-bold bg-red-600 px-2 py-1 rounded">CAM 01</span>
                     <span class="fps-display text-green-400 text-[10px] font-mono bg-black/60 px-2 py-1 rounded border border-green-900/50">-- FPS</span>
@@ -275,12 +276,10 @@
                     </div>
                     <input type="range" min="0" max="360" value="0" class="rotation-slider">
                 </div>
-                
                 <div class="flex gap-2 justify-between">
                     <select class="fov-select bg-gray-700 text-white text-[10px] rounded border border-gray-600 flex-1" disabled>
                         <option value="0">Fixed Lens</option>
                     </select>
-                    
                     <button class="snapshot-button bg-blue-600 hover:bg-blue-500 text-white px-2 rounded text-[10px]" title="Snapshot">SNAP</button>
                     <button class="close-button bg-red-900 hover:bg-red-700 text-white px-2 rounded text-[10px]" title="Remove">CLOSE</button>
                 </div>
@@ -289,6 +288,31 @@
     </template>
 
     <script>
+        // --- 0. AGE CALCULATION LOGIC ---
+        function calculateAge() {
+            const dobInput = document.getElementById('dob-input').value;
+            const ageInput = document.getElementById('age-input');
+            
+            if(!dobInput) return;
+
+            const dob = new Date(dobInput);
+            const today = new Date();
+            
+            let age = today.getFullYear() - dob.getFullYear();
+            const monthDiff = today.getMonth() - dob.getMonth();
+            
+            // Adjust if birth month hasn't happened yet this year, 
+            // or if it's the birth month but the day hasn't happened yet.
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+                age--;
+            }
+            
+            // Prevent negative age for future dates
+            if (age < 0) age = 0;
+            
+            ageInput.value = age;
+        }
+
         // --- 1. NAVIGATION LOGIC ---
         function switchView(viewId) {
             document.getElementById('landing-section').classList.add('hidden-section');
@@ -328,14 +352,12 @@
         let permissionsGranted = false;
         let timerInterval = null;
 
-        // Date Time
         function updateDateTime() {
             const now = new Date();
             document.getElementById('datetime-display').textContent = now.toLocaleString();
         }
         setInterval(updateDateTime, 1000);
 
-        // Get Cameras
         async function getCameras() {
             try {
                 if (!permissionsGranted) {
@@ -369,7 +391,6 @@
             }
         }
 
-        // Add Camera
         addCameraButton.addEventListener('click', async () => {
             const availableSlotKey = Object.keys(viewSlots).find(key => !viewSlots[key].classList.contains('occupied'));
             if (!availableSlotKey) {
@@ -387,7 +408,6 @@
                     video: { deviceId: { exact: deviceId }, width: { ideal: width }, height: { ideal: height } }
                 });
 
-                // Create Card
                 const cardClone = videoCardTemplate.content.cloneNode(true);
                 const cardDiv = cardClone.querySelector('.video-card');
                 const videoEl = cardDiv.querySelector('video');
@@ -395,20 +415,17 @@
                 videoEl.srcObject = stream;
                 
                 const slot = viewSlots[availableSlotKey];
-                slot.innerHTML = ''; // Clear "No Signal" text
+                slot.innerHTML = ''; 
                 slot.appendChild(cardDiv);
                 slot.classList.add('occupied');
                 slot.style.border = "2px solid #ef4444";
                 slot.style.background = "black";
 
-                // Store stream data
                 const streamId = stream.id;
                 activeStreams[streamId] = { deviceId, stream, card: cardDiv, slot: availableSlotKey };
 
-                // Setup Card Controls
                 setupCardControls(streamId, videoEl, cardDiv);
 
-                // Enable Record Button
                 recordAllButton.disabled = false;
                 recordAllButton.classList.replace('bg-gray-600', 'bg-red-600');
 
@@ -419,7 +436,6 @@
         });
 
         function setupCardControls(streamId, video, card) {
-            // Rotation
             const slider = card.querySelector('.rotation-slider');
             const valDisplay = card.querySelector('.rotation-value');
             slider.addEventListener('input', (e) => {
@@ -427,7 +443,6 @@
                 valDisplay.textContent = `${e.target.value}°`;
             });
 
-            // Close
             card.querySelector('.close-button').addEventListener('click', () => {
                 const data = activeStreams[streamId];
                 if(data) {
@@ -446,16 +461,11 @@
                 }
             });
 
-            // Snapshot
             card.querySelector('.snapshot-button').addEventListener('click', () => {
                 const canvas = document.createElement('canvas');
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
                 const ctx = canvas.getContext('2d');
-                
-                // Handle Rotation in canvas
-                const angle = parseInt(slider.value) * Math.PI / 180;
-                // Complex rotation logic omitted for brevity, taking simple snapshot
                 ctx.drawImage(video, 0, 0);
                 
                 const a = document.createElement('a');
@@ -499,7 +509,6 @@
             recordAllButton.classList.add('animate-pulse');
             document.getElementById('recording-timer-box').style.display = 'flex';
             
-            // Timer UI
             let seconds = 0;
             const timerEl = document.getElementById('recording-timer');
             timerInterval = setInterval(() => {
@@ -509,7 +518,6 @@
                 timerEl.textContent = `${min}:${sec}`;
             }, 1000);
 
-            // Start Recorders
             Object.values(activeStreams).forEach(data => {
                 const chunks = [];
                 const recorder = new MediaRecorder(data.stream);
@@ -529,7 +537,6 @@
                 recorder.start();
             });
 
-            // Auto Stop
             const duration = recordDurationSelect.value;
             if(duration !== 'manual') {
                 setTimeout(stopRecording, parseInt(duration) * 1000);
@@ -550,7 +557,6 @@
                 }
             });
         }
-
     </script>
 </body>
 </html>
