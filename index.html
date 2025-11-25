@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NDUR | Red & Black Edition</title>
+    <title>NDUR | Dashboard</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,11 +21,11 @@
         body, html {
             height: 100%;
             width: 100%;
+            overflow: hidden; /* Prevents scrolling */
         }
 
         /* --- BACKGROUND IMAGE SETUP --- */
         body {
-            /* Your background collage */
             background-image: url('bg-app.jpg');
             background-size: cover;
             background-position: center;
@@ -34,33 +34,33 @@
 
         /* --- DARK OVERLAY --- */
         .overlay {
-            background: rgba(0, 0, 0, 0.75); /* 75% opacity black */
+            background: rgba(0, 0, 0, 0.80); /* Slightly darker for better form readability */
             height: 100%;
             width: 100%;
             display: flex;
             flex-direction: column;
             color: white;
+            overflow-y: auto; /* Allows scrolling if form is tall */
         }
 
         /* --- NAVIGATION --- */
         nav {
             display: flex;
-            justify-content: flex-start; /* Aligns logo to left */
+            justify-content: flex-start;
             align-items: center;
             padding: 20px 50px;
-            /* Optional: Remove border if you want a cleaner look since there is no button */
-            border-bottom: 1px solid rgba(255, 0, 0, 0.2); 
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+            flex-shrink: 0;
         }
 
-        /* Logo Image Styling */
         .logo-img {
-            height: 45px;
+            height: 40px;
             width: auto;
             display: block;
         }
 
-        /* --- HERO CONTENT --- */
-        .hero {
+        /* --- SHARED CONTAINER STYLES --- */
+        .container {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -68,8 +68,12 @@
             align-items: center;
             text-align: center;
             padding: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
+        /* --- LANDING PAGE STYLES --- */
         h1 {
             font-size: 4.5rem;
             font-weight: 900;
@@ -79,12 +83,10 @@
             letter-spacing: -2px;
         }
 
-        h1 span {
-            color: #ff0000; 
-        }
+        h1 span { color: #ff0000; }
 
         p {
-            font-size: 1.5rem; /* Increased size slightly for the shorter text */
+            font-size: 1.5rem;
             font-weight: 400;
             margin-bottom: 40px;
             color: #ddd;
@@ -92,12 +94,64 @@
             line-height: 1.6;
         }
 
-        /* --- MAIN CTA BUTTON --- */
+        /* --- DASHBOARD STYLES --- */
+        .dashboard-box {
+            background: rgba(0, 0, 0, 0.6); /* Semi-transparent box */
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 40px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            backdrop-filter: blur(5px);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: white;
+            border-bottom: 2px solid #ff0000;
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: #ff0000;
+            margin-bottom: 5px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #444;
+            color: white;
+            border-radius: 4px;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #ff0000;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* --- BUTTONS --- */
         .cta-button {
             padding: 18px 45px;
             font-size: 1.1rem;
             background-color: #ff0000;
-            color: white; 
+            color: white;
             border: none;
             font-weight: 800;
             text-transform: uppercase;
@@ -106,19 +160,25 @@
             box-shadow: 0 4px 20px rgba(255, 0, 0, 0.4);
             transition: all 0.2s ease;
             letter-spacing: 1px;
+            margin-top: 10px;
         }
 
         .cta-button:hover {
             transform: translateY(-2px);
-            background-color: #cc0000; 
+            background-color: #cc0000;
             box-shadow: 0 6px 25px rgba(255, 0, 0, 0.6);
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- RESPONSIVENESS --- */
         @media (max-width: 768px) {
             h1 { font-size: 3rem; }
-            nav { padding: 20px; justify-content: center; /* Centers logo on mobile */ }
-            .logo-img { height: 40px; } 
+            nav { justify-content: center; }
+            .dashboard-box { padding: 20px; width: 100%; }
+            h2 { font-size: 1.4rem; }
         }
     </style>
 </head>
@@ -129,12 +189,53 @@
             <img src="white logo ndur small.png" alt="NDUR Logo" class="logo-img">
         </nav>
 
-        <div class="hero">
+        <div id="landing-section" class="container">
             <h1>Push Your <br><span>Limits</span></h1>
             <p>Track your Running Movement with NDÜR</p>
-            <button class="cta-button">Start Running</button>
+            <button class="cta-button" onclick="goToDashboard()">Start Running</button>
+        </div>
+
+        <div id="dashboard-section" class="container hidden">
+            <div class="dashboard-box">
+                <h2>Dashboard of 3 Side View of NDÜR</h2>
+                
+                <form onsubmit="event.preventDefault(); alert('Camera Setup Initializing...');">
+                    <div class="form-group">
+                        <label>Subject Name</label>
+                        <input type="text" placeholder="Enter Full Name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" placeholder="25" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" placeholder="+1 234 567 8900" required>
+                    </div>
+
+                    <button type="submit" class="cta-button" style="width: 100%;">
+                        Setup Camera View to Run
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
+
+    <script>
+        function goToDashboard() {
+            // Hide Landing
+            document.getElementById('landing-section').classList.add('hidden');
+            // Show Dashboard
+            document.getElementById('dashboard-section').classList.remove('hidden');
+        }
+    </script>
 
 </body>
 </html>
