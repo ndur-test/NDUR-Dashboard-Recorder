@@ -16,10 +16,11 @@
             theme: {
                 extend: {
                     colors: {
-                        ndurRed: '#ff0000',     /* Custom Red */
-                        ndurDarkRed: '#cc0000', /* Darker Red for hover */
+                        ndurRed: '#ff0000',     
+                        ndurDarkRed: '#cc0000', 
                     },
                     fontFamily: {
+                        /* This ensures INTER is used everywhere */
                         sans: ['Inter', 'sans-serif'],
                     },
                     boxShadow: {
@@ -32,7 +33,7 @@
     </script>
 
     <style>
-        /* Custom CSS strictly for Background Image */
+        /* Custom CSS for Background Image */
         .bg-custom {
             background-image: url('bg-app.jpg');
         }
@@ -42,8 +43,8 @@
 
     <div class="bg-black/80 h-full w-full flex flex-col overflow-y-auto">
 
-        <nav class="flex justify-start items-center px-6 py-5 md:px-12 border-b border-red-500/20 shrink-0">
-            <img src="white logo ndur small.png" alt="NDUR Logo" class="h-10 w-auto block">
+        <nav class="flex justify-center items-center py-6 border-b border-red-500/20 shrink-0">
+            <img src="white logo ndur small.png" alt="NDUR Logo" class="h-12 w-auto block">
         </nav>
 
         <div id="landing-section" class="flex-1 flex flex-col justify-center items-center text-center p-5 w-full max-w-7xl mx-auto">
@@ -115,7 +116,6 @@
             const landing = document.getElementById('landing-section');
             const dashboard = document.getElementById('dashboard-section');
 
-            // Add 'hidden' class to landing, remove it from dashboard
             landing.classList.add('hidden');
             dashboard.classList.remove('hidden');
         }
