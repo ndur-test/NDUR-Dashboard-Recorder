@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDUR | Red & Black Edition</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- RESET & BASE STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+        }
+
+        /* --- BACKGROUND IMAGE SETUP --- */
+        body {
+            /* Your background collage */
+            background-image: url('bg-app.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* --- DARK OVERLAY --- */
+        .overlay {
+            background: rgba(0, 0, 0, 0.75); /* 75% opacity black */
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            color: white;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.2);
+        }
+
+        /* Logo Image Styling */
+        .logo-img {
+            height: 45px; /* Adjusts the logo size */
+            width: auto;  /* Keeps the logo from stretching */
+            display: block;
+        }
+
+        .nav-links button {
+            background: transparent;
+            border: 2px solid #ff0000;
+            color: #fff;
+            padding: 10px 24px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: 0.3s;
+            border-radius: 4px;
+        }
+
+        .nav-links button:hover {
+            background: #ff0000;
+            color: #000;
+        }
+
+        /* --- HERO CONTENT --- */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            line-height: 1.1;
+            letter-spacing: -2px;
+        }
+
+        h1 span {
+            color: #ff0000; /* Matches the Red U in your logo */
+        }
+
+        p {
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 40px;
+            color: #ddd;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        /* --- MAIN CTA BUTTON --- */
+        .cta-button {
+            padding: 18px 45px;
+            font-size: 1.1rem;
+            background-color: #ff0000;
+            color: white; /* White text for better contrast on red */
+            border: none;
+            font-weight: 800;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.4);
+            transition: all 0.2s ease;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            background-color: #cc0000; /* Slightly darker red on hover */
+            box-shadow: 0 6px 25px rgba(255, 0, 0, 0.6);
+        }
+
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            nav { padding: 20px; }
+            .logo-img { height: 35px; } /* Smaller logo on mobile */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="overlay">
+        <nav>
+            <img src="white logo ndur small.png" alt="NDUR Logo" class="logo-img">
+            
+            <div class="nav-links">
+                <button>LOGIN</button>
+            </div>
+        </nav>
+
+        <div class="hero">
+            <h1>Push Your <br><span>Limits</span></h1>
+            <p>Track your progress, compete with friends, and break your personal records with NDUR.</p>
+            <button class="cta-button">Start Running</button>
+        </div>
+    </div>
+
+</body>
+</html>
