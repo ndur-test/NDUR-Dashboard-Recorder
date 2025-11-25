@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NDUR | 3-Camera Setup</title>
+    <title>NDUR | Manual Camera Setup</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,9 +73,7 @@
             width: 100%;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
         /* --- 6. LANDING PAGE --- */
         h1 {
@@ -182,10 +180,42 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            transition: border-color 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
-        .camera-card:hover { border-color: #ff0000; }
+        /* The Selector at the top of the card */
+        .camera-header {
+            background: #111;
+            padding: 10px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-label {
+            color: #ff0000;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .cam-select {
+            background: #222;
+            color: white;
+            border: 1px solid #444;
+            padding: 5px;
+            font-size: 0.8rem;
+            border-radius: 3px;
+            max-width: 150px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            flex: 1;
+            background: #000;
+        }
 
         video {
             width: 100%;
@@ -193,22 +223,6 @@
             object-fit: cover;
             display: block;
             transform: scaleX(-1);
-            background: #111;
-        }
-
-        .camera-overlay {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(255, 0, 0, 0.9);
-            color: white;
-            padding: 4px 12px;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            border-radius: 3px;
-            z-index: 10;
         }
 
         .recording-indicator {
@@ -237,15 +251,6 @@
             0% { opacity: 1; }
             50% { opacity: 0.3; }
             100% { opacity: 1; }
-        }
-
-        /* Mobile Adjustments */
-        @media (max-width: 768px) {
-            h1 { font-size: 3.5rem; }
-            .logo-img { height: 40px; }
-            .dashboard-box { padding: 20px; }
-            .camera-grid { flex-direction: column; }
-            .camera-card { width: 100%; min-height: 250px; }
         }
     </style>
 </head>
@@ -296,33 +301,54 @@
                 <h2 style="font-size: 1.5rem; border: none; margin: 0; text-align: left;">
                     Subject: <span id="display-name" style="color:#ff0000;">Runner</span>
                 </h2>
-                <div style="color: #aaa; font-size: 0.9rem;">SYSTEM STATUS: <span style="color:#00ff00;">ONLINE</span></div>
+                <div style="color: #aaa; font-size: 0.9rem;">STATUS: <span style="color:#00ff00;">CONFIGURING</span></div>
             </div>
 
             <div class="camera-grid">
                 
                 <div class="camera-card">
-                    <div class="camera-overlay">1. Left Side</div>
-                    <div class="recording-indicator"><div class="rec-dot"></div> REC</div>
-                    <video id="webcam-left" autoplay playsinline muted></video>
+                    <div class="camera-header">
+                        <span class="view-label">1. Left Side</span>
+                        <select id="select-left" class="cam-select" onchange="changeCameraSource('left', this.value)">
+                            <option value="">Select Camera...</option>
+                        </select>
+                    </div>
+                    <div class="video-wrapper">
+                        <div class="recording-indicator"><div class="rec-dot"></div> REC</div>
+                        <video id="webcam-left" autoplay playsinline muted></video>
+                    </div>
                 </div>
 
                 <div class="camera-card">
-                    <div class="camera-overlay">2. Back Side</div>
-                    <div class="recording-indicator"><div class="rec-dot"></div> REC</div>
-                    <video id="webcam-back" autoplay playsinline muted></video>
+                    <div class="camera-header">
+                        <span class="view-label">2. Back Side</span>
+                        <select id="select-back" class="cam-select" onchange="changeCameraSource('back', this.value)">
+                            <option value="">Select Camera...</option>
+                        </select>
+                    </div>
+                    <div class="video-wrapper">
+                        <div class="recording-indicator"><div class="rec-dot"></div> REC</div>
+                        <video id="webcam-back" autoplay playsinline muted></video>
+                    </div>
                 </div>
 
                 <div class="camera-card">
-                    <div class="camera-overlay">3. Right Side</div>
-                    <div class="recording-indicator"><div class="rec-dot"></div> REC</div>
-                    <video id="webcam-right" autoplay playsinline muted></video>
+                    <div class="camera-header">
+                        <span class="view-label">3. Right Side</span>
+                        <select id="select-right" class="cam-select" onchange="changeCameraSource('right', this.value)">
+                            <option value="">Select Camera...</option>
+                        </select>
+                    </div>
+                    <div class="video-wrapper">
+                        <div class="recording-indicator"><div class="rec-dot"></div> REC</div>
+                        <video id="webcam-right" autoplay playsinline muted></video>
+                    </div>
                 </div>
 
             </div>
 
             <div style="margin-top: 30px; display: flex; gap: 20px;">
-                <button class="btn-red" style="background: #333;" onclick="stopCamera()">Stop Session</button>
+                <button class="btn-red" style="background: #333;" onclick="stopAllCameras()">Stop Session</button>
                 <button class="btn-red">Start Analysis</button>
             </div>
 
@@ -342,89 +368,86 @@
             document.getElementById('display-name').textContent = name;
             switchView('camera-section');
             
-            // Start the multi-camera logic
-            startMultiCamera();
+            // Initialize system
+            initCameraSystem();
         }
 
-        async function startMultiCamera() {
-            const videoLeft = document.getElementById('webcam-left');
-            const videoBack = document.getElementById('webcam-back');
-            const videoRight = document.getElementById('webcam-right');
+        // --- CAMERA SYSTEM LOGIC ---
 
+        async function initCameraSystem() {
             try {
-                // 1. First, ask for generic permission to get access to labels/IDs
+                // 1. Request permission first to ensure we can see device labels
                 await navigator.mediaDevices.getUserMedia({ video: true });
 
-                // 2. Enumerate all devices
+                // 2. Enumerate devices
                 const devices = await navigator.mediaDevices.enumerateDevices();
-                // Filter specifically for video inputs (cameras)
                 const videoDevices = devices.filter(device => device.kind === 'videoinput');
 
-                console.log("Cameras found:", videoDevices.length);
+                // 3. Populate dropdowns
+                populateDropdown('select-left', videoDevices);
+                populateDropdown('select-back', videoDevices);
+                populateDropdown('select-right', videoDevices);
 
-                if (videoDevices.length === 0) {
-                    alert("No cameras detected!");
-                    return;
-                }
+                // 4. (Optional) Auto-assign if 3 cameras exist to save time
+                if (videoDevices.length > 0) changeCameraSource('left', videoDevices[0].deviceId);
+                if (videoDevices.length > 1) changeCameraSource('back', videoDevices[1].deviceId);
+                if (videoDevices.length > 2) changeCameraSource('right', videoDevices[2].deviceId);
+                
+                // If user wants to change, they can use the dropdowns
 
-                // 3. Helper function to assign a specific camera ID to a video element
-                const assignCamera = async (videoElement, deviceId) => {
-                    try {
-                        const stream = await navigator.mediaDevices.getUserMedia({
-                            video: { deviceId: { exact: deviceId } }
-                        });
-                        videoElement.srcObject = stream;
-                    } catch (err) {
-                        console.error("Error assigning camera:", err);
-                    }
-                };
-
-                // 4. Assign Cameras automatically
-                // Camera 1 -> Left Screen
-                if (videoDevices[0]) {
-                    assignCamera(videoLeft, videoDevices[0].deviceId);
-                }
-
-                // Camera 2 -> Back Screen
-                if (videoDevices[1]) {
-                    assignCamera(videoBack, videoDevices[1].deviceId);
-                } else {
-                    // If you don't have a 2nd camera, reuse the 1st one so the UI isn't blank
-                    console.log("Camera 2 not found, using Camera 1");
-                    assignCamera(videoBack, videoDevices[0].deviceId);
-                }
-
-                // Camera 3 -> Right Screen
-                if (videoDevices[2]) {
-                    assignCamera(videoRight, videoDevices[2].deviceId);
-                } else {
-                    // If you don't have a 3rd camera, reuse the 1st one
-                    console.log("Camera 3 not found, using Camera 1");
-                    assignCamera(videoRight, videoDevices[0].deviceId);
-                }
-
-            } catch (error) {
-                console.error("Error accessing media devices.", error);
-                alert("Please allow camera access to use this feature.");
+            } catch (err) {
+                console.error("Camera Error:", err);
+                alert("Please allow camera access.");
             }
         }
 
-        function stopCamera() {
-            // Stop streams for all video elements
-            const videos = [
-                document.getElementById('webcam-left'),
-                document.getElementById('webcam-back'),
-                document.getElementById('webcam-right')
-            ];
+        function populateDropdown(selectId, devices) {
+            const select = document.getElementById(selectId);
+            // Clear existing except first
+            select.innerHTML = '<option value="">Select Camera...</option>';
+            
+            devices.forEach((device, index) => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                // If label is empty, give it a generic name
+                option.text = device.label || `Camera ${index + 1}`;
+                select.appendChild(option);
+            });
+        }
 
-            videos.forEach(video => {
-                if (video.srcObject) {
-                    const tracks = video.srcObject.getTracks();
-                    tracks.forEach(track => track.stop());
-                    video.srcObject = null;
+        // Called when dropdown changes
+        async function changeCameraSource(position, deviceId) {
+            if (!deviceId) return; // Do nothing if "Select Camera..." is chosen
+
+            const videoElement = document.getElementById(`webcam-${position}`);
+            const selectElement = document.getElementById(`select-${position}`);
+
+            // Update selector UI value (if triggered by auto-assign)
+            selectElement.value = deviceId;
+
+            // Stop existing stream if any
+            if (videoElement.srcObject) {
+                videoElement.srcObject.getTracks().forEach(track => track.stop());
+            }
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { deviceId: { exact: deviceId } }
+                });
+                videoElement.srcObject = stream;
+            } catch (err) {
+                console.error(`Error starting ${position} camera:`, err);
+            }
+        }
+
+        function stopAllCameras() {
+            ['left', 'back', 'right'].forEach(pos => {
+                const vid = document.getElementById(`webcam-${pos}`);
+                if (vid.srcObject) {
+                    vid.srcObject.getTracks().forEach(track => track.stop());
+                    vid.srcObject = null;
                 }
             });
-
             switchView('dashboard-section');
         }
     </script>
