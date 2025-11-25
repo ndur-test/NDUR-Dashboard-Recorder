@@ -3,454 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NDUR | Manual Camera Setup</title>
+    <title>NDUR | Endurance Laboratory</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        ndurRed: '#ef4444',
+                        ndurDark: '#111827'
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        /* --- 1. RESET & BASIC SETUP --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body, html {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background-color: #000; 
-        }
-
-        /* --- 2. BACKGROUND IMAGE --- */
+        /* GLOBAL STYLES */
         body {
+            background-color: #111827;
             background-image: url('bg-app.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             background-repeat: no-repeat;
+            color: #F9FAFB;
+            overflow-x: hidden; /* Prevent horizontal scroll */
         }
 
-        /* --- 3. DARK OVERLAY --- */
-        .overlay {
-            background-color: rgba(0, 0, 0, 0.85); 
-            height: 100%;
-            width: 100%;
+        /* Dark Overlay */
+        .app-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.85); /* Dark background for readability */
+            z-index: 0;
+        }
+
+        /* Content Wrapper */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
         }
 
-        /* --- 4. NAVIGATION --- */
-        nav {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 0, 0, 0.3);
-            flex-shrink: 0;
-            background: rgba(0,0,0,0.5);
-        }
-
-        .logo-img {
-            height: 40px;
-            width: auto;
-            display: block;
-        }
-
-        /* --- 5. SECTIONS --- */
-        .section-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
+        /* UTILITIES */
+        .hidden-section { display: none !important; }
+        
+        /* CUSTOM RANGE SLIDER */
+        .rotation-slider {
+            -webkit-appearance: none;
             width: 100%;
-        }
-
-        .hidden { display: none !important; }
-
-        /* --- 6. LANDING PAGE --- */
-        h1 {
-            font-size: 5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: white;
-            line-height: 1;
-            margin-bottom: 20px;
-            letter-spacing: -2px;
-        }
-
-        h1 span { color: #ff0000; }
-
-        .subtitle {
-            font-size: 1.5rem;
-            color: #ddd;
-            margin-bottom: 40px;
-        }
-
-        /* --- 7. FORM STYLES --- */
-        .dashboard-box {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 0, 0, 0.4);
-            padding: 40px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 500px;
-            backdrop-filter: blur(10px);
-        }
-
-        h2 {
-            color: white;
-            font-size: 2rem;
-            text-transform: uppercase;
-            border-bottom: 3px solid #ff0000;
-            display: inline-block;
-            margin-bottom: 10px;
-            padding-bottom: 5px;
-        }
-
-        .form-label {
-            display: block;
-            text-align: left;
-            color: #ff0000;
-            font-weight: 700;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            margin-top: 20px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid #555;
-            border-radius: 4px;
-            color: white;
-            font-size: 1rem;
+            height: 6px;
+            background: #4B5563;
+            border-radius: 5px;
             outline: none;
         }
-
-        .form-input:focus { border-color: #ff0000; }
-
-        /* --- 8. BUTTONS --- */
-        .btn-red {
-            background-color: #ff0000;
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            border-radius: 5px;
+        .rotation-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #ef4444;
+            border-radius: 50%;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
-            transition: 0.2s;
-            margin-top: 20px;
         }
 
-        .btn-red:hover {
-            background-color: #cc0000;
-            transform: translateY(-2px);
-        }
-
-        /* --- 9. MULTI-CAMERA GRID STYLES --- */
-        .camera-grid {
-            display: flex;
-            width: 100%;
-            max-width: 1400px;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap; 
-            padding-top: 20px;
-        }
-
-        .camera-card {
-            position: relative;
-            flex: 1;
-            min-width: 300px;
-            background: #000;
-            border: 2px solid #333;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* The Selector at the top of the card */
-        .camera-header {
-            background: #111;
-            padding: 10px;
-            border-bottom: 1px solid #333;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .view-label {
-            color: #ff0000;
-            font-weight: 800;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-        }
-
-        .cam-select {
-            background: #222;
-            color: white;
-            border: 1px solid #444;
-            padding: 5px;
-            font-size: 0.8rem;
-            border-radius: 3px;
-            max-width: 150px;
-        }
-
-        .video-wrapper {
-            position: relative;
-            flex: 1;
-            background: #000;
-        }
-
-        video {
+        /* VIDEO SLOT STYLES */
+        .view-slot {
+            border: 2px dashed #374151;
+            border-radius: 1rem;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            display: block;
-            transform: scaleX(-1);
-        }
-
-        .recording-indicator {
-            position: absolute;
-            top: 15px;
-            right: 15px;
+            min-height: 250px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 8px;
-            color: white;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            z-index: 10;
+            justify-content: center;
+            background-color: rgba(17, 24, 39, 0.5);
+            overflow: hidden;
         }
-
-        .rec-dot {
-            height: 12px;
-            width: 12px;
-            background-color: red;
-            border-radius: 50%;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.3; }
-            100% { opacity: 1; }
+        .view-slot.occupied {
+            border: 2px solid #ef4444; /* Red border when active */
+            padding: 0;
+            background: black;
         }
     </style>
 </head>
 <body>
 
-    <div class="overlay">
-        
-        <nav>
-            <img src="white logo ndur small.png" alt="NDUR Logo" class="logo-img">
-        </nav>
+    <div class="app-overlay"></div>
 
-        <div id="landing-section" class="section-container">
-            <h1>Push Your <br><span>Limits</span></h1>
-            <p class="subtitle">Track your Running Movement with NDÜR</p>
-            <button class="btn-red" onclick="switchView('dashboard-section')">Start Running</button>
+    <div class="content-layer">
+
+        <div id="landing-section" class="flex-1 flex flex-col items-center justify-center text-center p-6">
+            <img src="white logo ndur small.png" alt="NDUR" class="h-16 mb-8 opacity-90">
+            
+            <h1 class="text-6xl md:text-8xl font-black uppercase tracking-tighter mb-4 leading-none">
+                Push Your <br><span class="text-ndurRed">Limits</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 font-light mb-10 tracking-wide">
+                Track your Running Movement with NDÜR
+            </p>
+            <button onclick="switchView('dashboard-section')" 
+                class="bg-ndurRed hover:bg-red-600 text-white font-extrabold uppercase text-lg px-10 py-4 rounded shadow-[0_0_20px_rgba(239,68,68,0.5)] transition-all transform hover:-translate-y-1">
+                Start Running
+            </button>
         </div>
 
-        <div id="dashboard-section" class="section-container hidden">
-            <div class="dashboard-box">
-                <h2>Dashboard</h2>
-                <p style="color: #aaa; margin-bottom: 20px; text-transform: uppercase; font-size: 0.9rem;">
-                    3 Side View of NDÜR
-                </p>
+        <div id="dashboard-section" class="hidden-section flex-1 flex flex-col items-center justify-center p-6">
+            
+            <div class="absolute top-6 left-0 w-full flex justify-center">
+                <img src="white logo ndur small.png" alt="NDUR" class="h-10 opacity-80">
+            </div>
 
-                <form id="setup-form" onsubmit="handleFormSubmit(event)">
-                    <label class="form-label">Subject Name</label>
-                    <input type="text" class="form-input" id="subject-name" placeholder="Enter Full Name" required>
+            <div class="bg-black/60 backdrop-blur-md border border-white/10 p-8 rounded-2xl w-full max-w-lg shadow-2xl">
+                <h2 class="text-3xl font-bold uppercase text-white mb-6 border-b-4 border-ndurRed inline-block pb-2">
+                    Runner Profile
+                </h2>
+                
+                <form onsubmit="handleFormSubmit(event)" class="space-y-5">
+                    <div>
+                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Subject Name</label>
+                        <input type="text" id="form-name" placeholder="Enter Full Name" required 
+                               class="w-full bg-white/5 border border-gray-600 rounded p-3 text-white focus:border-ndurRed focus:outline-none transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">D.O.B</label>
+                        <input type="date" required 
+                               class="w-full bg-white/5 border border-gray-600 rounded p-3 text-white focus:border-ndurRed focus:outline-none transition-colors">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Age</label>
+                            <input type="number" placeholder="25" required 
+                                   class="w-full bg-white/5 border border-gray-600 rounded p-3 text-white focus:border-ndurRed focus:outline-none transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Phone</label>
+                            <input type="tel" placeholder="123-456-7890" required 
+                                   class="w-full bg-white/5 border border-gray-600 rounded p-3 text-white focus:border-ndurRed focus:outline-none transition-colors">
+                        </div>
+                    </div>
 
-                    <label class="form-label">D.O.B</label>
-                    <input type="date" class="form-input" required>
-
-                    <label class="form-label">Age</label>
-                    <input type="number" class="form-input" placeholder="25" required>
-
-                    <label class="form-label">Phone Number</label>
-                    <input type="tel" class="form-input" placeholder="+1 234 567 8900" required>
-
-                    <button type="submit" class="btn-red" style="width: 100%;">
-                        Setup Camera View to Run
+                    <button type="submit" 
+                        class="w-full bg-ndurRed hover:bg-red-600 text-white font-bold uppercase py-4 rounded mt-4 shadow-lg transition-all">
+                        Setup Camera View
                     </button>
                 </form>
             </div>
         </div>
 
-        <div id="camera-section" class="section-container hidden">
+        <div id="camera-section" class="hidden-section flex-col h-full w-full max-w-[98%] mx-auto py-4">
             
-            <div style="width: 100%; max-width: 1400px; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 10px;">
-                <h2 style="font-size: 1.5rem; border: none; margin: 0; text-align: left;">
-                    Subject: <span id="display-name" style="color:#ff0000;">Runner</span>
-                </h2>
-                <div style="color: #aaa; font-size: 0.9rem;">STATUS: <span style="color:#00ff00;">CONFIGURING</span></div>
+            <header class="flex items-center justify-between mb-4 flex-wrap gap-4 px-2">
+                <div class="flex items-center">
+                    <img src="white logo ndur small.png" onerror="this.src='https://placehold.co/100x40/ef4444/ffffff?text=NDUR'" alt="NDÜR" class="h-10 object-contain">
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-ndurRed ml-4 tracking-tight">Endurance Laboratory</h1>
+                </div>
+                <div id="datetime-display" class="text-gray-300 text-xs font-mono bg-gray-800 px-3 py-1 rounded-full border border-gray-700"></div>
+            </header>
+
+            <div class="bg-gray-800/80 backdrop-blur rounded-xl shadow-xl p-4 mb-4 border-t-2 border-ndurRed">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                    
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Session Name</label>
+                        <input type="text" id="name-input" class="w-full bg-gray-700 border border-gray-600 rounded p-2 text-sm text-white" readonly>
+                    </div>
+
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Select Source</label>
+                        <select id="camera-select" class="w-full bg-gray-700 border border-gray-600 rounded p-2 text-sm text-white">
+                            <option>Scanning for cameras...</option>
+                        </select>
+                    </div>
+
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Resolution</label>
+                        <select id="resolution-select" class="w-full bg-gray-700 border border-gray-600 rounded p-2 text-sm text-white">
+                            <option value="1920x1080" selected>Full HD (1080p)</option>
+                            <option value="1280x720">HD (720p)</option>
+                            <option value="640x480">VGA (480p)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-span-1">
+                        <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Auto-Stop</label>
+                        <select id="record-duration-select" class="w-full bg-gray-700 border border-gray-600 rounded p-2 text-sm text-white">
+                            <option value="manual" selected>Manual Stop</option>
+                            <option value="30">30 seconds</option>
+                            <option value="60">1 minute</option>
+                        </select>
+                    </div>
+
+                    <div class="col-span-1 flex gap-2">
+                        <button id="add-camera-button" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-2 rounded text-sm transition-colors">
+                            Add View
+                        </button>
+                        <button id="record-all-button" class="flex-1 bg-gray-600 text-white font-bold py-2 px-2 rounded text-sm transition-colors disabled:opacity-50" disabled>
+                            Record All
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <div class="camera-grid">
+            <main id="video-grid" class="flex-grow grid grid-cols-1 md:grid-cols-3 gap-4 w-full h-full pb-4">
                 
-                <div class="camera-card">
-                    <div class="camera-header">
-                        <span class="view-label">1. Left Side</span>
-                        <select id="select-left" class="cam-select" onchange="changeCameraSource('left', this.value)">
-                            <option value="">Select Camera...</option>
-                        </select>
-                    </div>
-                    <div class="video-wrapper">
-                        <div class="recording-indicator"><div class="rec-dot"></div> REC</div>
-                        <video id="webcam-left" autoplay playsinline muted></video>
+                <div id="countdown-overlay" style="display:none;" class="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+                    <div class="bg-black/90 rounded-3xl px-20 py-12 border-4 border-red-600 animate-pulse">
+                        <span id="countdown-number" class="text-8xl font-black text-red-500 font-mono">3</span>
                     </div>
                 </div>
 
-                <div class="camera-card">
-                    <div class="camera-header">
-                        <span class="view-label">2. Back Side</span>
-                        <select id="select-back" class="cam-select" onchange="changeCameraSource('back', this.value)">
-                            <option value="">Select Camera...</option>
-                        </select>
-                    </div>
-                    <div class="video-wrapper">
-                        <div class="recording-indicator"><div class="rec-dot"></div> REC</div>
-                        <video id="webcam-back" autoplay playsinline muted></video>
+                <div id="recording-timer-box" style="display:none;" class="fixed left-1/2 top-20 transform -translate-x-1/2 z-40">
+                    <div class="bg-red-600 text-white px-6 py-2 rounded-full shadow-lg flex items-center gap-2 animate-pulse border-2 border-white/20">
+                        <div class="w-3 h-3 bg-white rounded-full"></div>
+                        <span class="font-bold uppercase text-xs tracking-widest mr-2">REC</span>
+                        <span id="recording-timer" class="font-mono text-xl font-bold">00:00</span>
                     </div>
                 </div>
 
-                <div class="camera-card">
-                    <div class="camera-header">
-                        <span class="view-label">3. Right Side</span>
-                        <select id="select-right" class="cam-select" onchange="changeCameraSource('right', this.value)">
-                            <option value="">Select Camera...</option>
-                        </select>
-                    </div>
-                    <div class="video-wrapper">
-                        <div class="recording-indicator"><div class="rec-dot"></div> REC</div>
-                        <video id="webcam-right" autoplay playsinline muted></video>
-                    </div>
+                <div id="left-view" class="view-slot group relative">
+                    <h2 class="text-xl font-bold text-gray-500 mb-2 uppercase tracking-widest">Left View</h2>
+                    <div class="text-gray-600 text-sm">No Signal</div>
                 </div>
 
-            </div>
+                <div id="center-view" class="view-slot group relative">
+                    <h2 class="text-xl font-bold text-gray-500 mb-2 uppercase tracking-widest">Center View</h2>
+                    <div class="text-gray-600 text-sm">No Signal</div>
+                </div>
 
-            <div style="margin-top: 30px; display: flex; gap: 20px;">
-                <button class="btn-red" style="background: #333;" onclick="stopAllCameras()">Stop Session</button>
-                <button class="btn-red">Start Analysis</button>
-            </div>
+                <div id="right-view" class="view-slot group relative">
+                    <h2 class="text-xl font-bold text-gray-500 mb-2 uppercase tracking-widest">Right View</h2>
+                    <div class="text-gray-600 text-sm">No Signal</div>
+                </div>
+            </main>
 
+            <footer class="text-center">
+                <p id="status" class="text-gray-500 text-xs font-mono">&copy; 2025 Endurance Lab. System Ready.</p>
+                <button onclick="switchView('landing-section')" class="mt-2 text-xs text-red-500 hover:text-white underline">Exit Session</button>
+            </footer>
         </div>
 
     </div>
 
+    <template id="video-card-template">
+        <div class="video-card flex flex-col h-full w-full bg-gray-900 overflow-hidden">
+            <div class="video-wrapper relative flex-grow bg-black flex items-center justify-center overflow-hidden group">
+                <video autoplay playsinline muted class="h-full w-full object-contain"></video>
+                
+                <div class="absolute top-0 left-0 w-full p-2 flex justify-between opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span class="camera-label text-white text-[10px] font-bold bg-red-600 px-2 py-1 rounded">CAM 01</span>
+                    <span class="fps-display text-green-400 text-[10px] font-mono bg-black/60 px-2 py-1 rounded border border-green-900/50">-- FPS</span>
+                </div>
+                <div class="absolute inset-0 pointer-events-none border border-white/5"></div>
+            </div>
+
+            <div class="bg-gray-800 p-2 border-t border-gray-700 space-y-2">
+                <div>
+                    <div class="flex justify-between text-[10px] text-gray-400 mb-1">
+                        <span>Rotation</span>
+                        <span class="rotation-value font-mono text-white">0°</span>
+                    </div>
+                    <input type="range" min="0" max="360" value="0" class="rotation-slider">
+                </div>
+                
+                <div class="flex gap-2 justify-between">
+                    <select class="fov-select bg-gray-700 text-white text-[10px] rounded border border-gray-600 flex-1" disabled>
+                        <option value="0">Fixed Lens</option>
+                    </select>
+                    
+                    <button class="snapshot-button bg-blue-600 hover:bg-blue-500 text-white px-2 rounded text-[10px]" title="Snapshot">SNAP</button>
+                    <button class="close-button bg-red-900 hover:bg-red-700 text-white px-2 rounded text-[10px]" title="Remove">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <script>
+        // --- 1. NAVIGATION LOGIC ---
         function switchView(viewId) {
-            document.querySelectorAll('.section-container').forEach(el => el.classList.add('hidden'));
-            document.getElementById(viewId).classList.remove('hidden');
+            document.getElementById('landing-section').classList.add('hidden-section');
+            document.getElementById('dashboard-section').classList.add('hidden-section');
+            document.getElementById('camera-section').classList.add('hidden-section');
+            document.getElementById(viewId).classList.remove('hidden-section');
         }
 
         function handleFormSubmit(event) {
             event.preventDefault();
-            const name = document.getElementById('subject-name').value;
-            document.getElementById('display-name').textContent = name;
-            switchView('camera-section');
+            const name = document.getElementById('form-name').value;
+            // Transfer name to camera section
+            document.getElementById('name-input').value = name;
             
-            // Initialize system
-            initCameraSystem();
+            switchView('camera-section');
+            // Trigger camera scan
+            getCameras();
         }
 
-        // --- CAMERA SYSTEM LOGIC ---
+        // --- 2. CAMERA SYSTEM LOGIC ---
+        const cameraSelect = document.getElementById('camera-select');
+        const resolutionSelect = document.getElementById('resolution-select');
+        const addCameraButton = document.getElementById('add-camera-button');
+        const recordAllButton = document.getElementById('record-all-button');
+        const statusElement = document.getElementById('status');
+        const videoCardTemplate = document.getElementById('video-card-template');
+        const recordDurationSelect = document.getElementById('record-duration-select');
+        
+        const viewSlots = {
+            left: document.getElementById('left-view'),
+            center: document.getElementById('center-view'),
+            right: document.getElementById('right-view')
+        };
 
-        async function initCameraSystem() {
+        const activeStreams = {};
+        let isRecordingAll = false;
+        let permissionsGranted = false;
+        let timerInterval = null;
+
+        // Date Time
+        function updateDateTime() {
+            const now = new Date();
+            document.getElementById('datetime-display').textContent = now.toLocaleString();
+        }
+        setInterval(updateDateTime, 1000);
+
+        // Get Cameras
+        async function getCameras() {
             try {
-                // 1. Request permission first to ensure we can see device labels
-                await navigator.mediaDevices.getUserMedia({ video: true });
-
-                // 2. Enumerate devices
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const videoDevices = devices.filter(device => device.kind === 'videoinput');
-
-                // 3. Populate dropdowns
-                populateDropdown('select-left', videoDevices);
-                populateDropdown('select-back', videoDevices);
-                populateDropdown('select-right', videoDevices);
-
-                // 4. (Optional) Auto-assign if 3 cameras exist to save time
-                if (videoDevices.length > 0) changeCameraSource('left', videoDevices[0].deviceId);
-                if (videoDevices.length > 1) changeCameraSource('back', videoDevices[1].deviceId);
-                if (videoDevices.length > 2) changeCameraSource('right', videoDevices[2].deviceId);
+                if (!permissionsGranted) {
+                    await navigator.mediaDevices.getUserMedia({ video: true });
+                    permissionsGranted = true;
+                }
                 
-                // If user wants to change, they can use the dropdowns
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const videoDevices = devices.filter(d => d.kind === 'videoinput');
+                
+                cameraSelect.innerHTML = '';
+                
+                if (videoDevices.length === 0) {
+                    const opt = document.createElement('option');
+                    opt.text = "No cameras found";
+                    cameraSelect.add(opt);
+                    return;
+                }
+
+                videoDevices.forEach((device, index) => {
+                    const option = document.createElement('option');
+                    option.value = device.deviceId;
+                    option.textContent = device.label || `Camera ${index + 1}`;
+                    cameraSelect.appendChild(option);
+                });
 
             } catch (err) {
-                console.error("Camera Error:", err);
-                alert("Please allow camera access.");
+                console.error(err);
+                statusElement.textContent = "Error: Allow camera permissions";
+                statusElement.classList.add('text-red-500');
             }
         }
 
-        function populateDropdown(selectId, devices) {
-            const select = document.getElementById(selectId);
-            // Clear existing except first
-            select.innerHTML = '<option value="">Select Camera...</option>';
+        // Add Camera
+        addCameraButton.addEventListener('click', async () => {
+            const availableSlotKey = Object.keys(viewSlots).find(key => !viewSlots[key].classList.contains('occupied'));
+            if (!availableSlotKey) {
+                alert("All views occupied. Remove one first.");
+                return;
+            }
+
+            const deviceId = cameraSelect.value;
+            if(!deviceId) return;
+
+            const [width, height] = resolutionSelect.value.split('x');
             
-            devices.forEach((device, index) => {
-                const option = document.createElement('option');
-                option.value = device.deviceId;
-                // If label is empty, give it a generic name
-                option.text = device.label || `Camera ${index + 1}`;
-                select.appendChild(option);
-            });
-        }
-
-        // Called when dropdown changes
-        async function changeCameraSource(position, deviceId) {
-            if (!deviceId) return; // Do nothing if "Select Camera..." is chosen
-
-            const videoElement = document.getElementById(`webcam-${position}`);
-            const selectElement = document.getElementById(`select-${position}`);
-
-            // Update selector UI value (if triggered by auto-assign)
-            selectElement.value = deviceId;
-
-            // Stop existing stream if any
-            if (videoElement.srcObject) {
-                videoElement.srcObject.getTracks().forEach(track => track.stop());
-            }
-
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({
-                    video: { deviceId: { exact: deviceId } }
+                    video: { deviceId: { exact: deviceId }, width: { ideal: width }, height: { ideal: height } }
                 });
-                videoElement.srcObject = stream;
+
+                // Create Card
+                const cardClone = videoCardTemplate.content.cloneNode(true);
+                const cardDiv = cardClone.querySelector('.video-card');
+                const videoEl = cardDiv.querySelector('video');
+                
+                videoEl.srcObject = stream;
+                
+                const slot = viewSlots[availableSlotKey];
+                slot.innerHTML = ''; // Clear "No Signal" text
+                slot.appendChild(cardDiv);
+                slot.classList.add('occupied');
+                slot.style.border = "2px solid #ef4444";
+                slot.style.background = "black";
+
+                // Store stream data
+                const streamId = stream.id;
+                activeStreams[streamId] = { deviceId, stream, card: cardDiv, slot: availableSlotKey };
+
+                // Setup Card Controls
+                setupCardControls(streamId, videoEl, cardDiv);
+
+                // Enable Record Button
+                recordAllButton.disabled = false;
+                recordAllButton.classList.replace('bg-gray-600', 'bg-red-600');
+
             } catch (err) {
-                console.error(`Error starting ${position} camera:`, err);
+                console.error(err);
+                alert("Failed to start camera. Is it being used by another app?");
+            }
+        });
+
+        function setupCardControls(streamId, video, card) {
+            // Rotation
+            const slider = card.querySelector('.rotation-slider');
+            const valDisplay = card.querySelector('.rotation-value');
+            slider.addEventListener('input', (e) => {
+                video.style.transform = `rotate(${e.target.value}deg)`;
+                valDisplay.textContent = `${e.target.value}°`;
+            });
+
+            // Close
+            card.querySelector('.close-button').addEventListener('click', () => {
+                const data = activeStreams[streamId];
+                if(data) {
+                    data.stream.getTracks().forEach(t => t.stop());
+                    const slot = viewSlots[data.slot];
+                    slot.innerHTML = `<h2 class="text-xl font-bold text-gray-500 mb-2 uppercase tracking-widest">${data.slot} View</h2><div class="text-gray-600 text-sm">No Signal</div>`;
+                    slot.classList.remove('occupied');
+                    slot.style.border = "2px dashed #374151";
+                    slot.style.background = "rgba(17, 24, 39, 0.5)";
+                    delete activeStreams[streamId];
+                    
+                    if(Object.keys(activeStreams).length === 0) {
+                        recordAllButton.disabled = true;
+                        recordAllButton.classList.replace('bg-red-600', 'bg-gray-600');
+                    }
+                }
+            });
+
+            // Snapshot
+            card.querySelector('.snapshot-button').addEventListener('click', () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                const ctx = canvas.getContext('2d');
+                
+                // Handle Rotation in canvas
+                const angle = parseInt(slider.value) * Math.PI / 180;
+                // Complex rotation logic omitted for brevity, taking simple snapshot
+                ctx.drawImage(video, 0, 0);
+                
+                const a = document.createElement('a');
+                a.href = canvas.toDataURL('image/png');
+                a.download = `NDUR_SNAP_${Date.now()}.png`;
+                a.click();
+            });
+        }
+
+        // --- 3. RECORDING LOGIC ---
+        recordAllButton.addEventListener('click', () => {
+            if(isRecordingAll) {
+                stopRecording();
+            } else {
+                startCountdown();
+            }
+        });
+
+        function startCountdown() {
+            const overlay = document.getElementById('countdown-overlay');
+            const num = document.getElementById('countdown-number');
+            overlay.style.display = 'flex';
+            let count = 3;
+            num.textContent = count;
+            
+            const int = setInterval(() => {
+                count--;
+                if(count > 0) {
+                    num.textContent = count;
+                } else {
+                    clearInterval(int);
+                    overlay.style.display = 'none';
+                    startRecording();
+                }
+            }, 1000);
+        }
+
+        function startRecording() {
+            isRecordingAll = true;
+            recordAllButton.textContent = "Stop Recording";
+            recordAllButton.classList.add('animate-pulse');
+            document.getElementById('recording-timer-box').style.display = 'flex';
+            
+            // Timer UI
+            let seconds = 0;
+            const timerEl = document.getElementById('recording-timer');
+            timerInterval = setInterval(() => {
+                seconds++;
+                const min = Math.floor(seconds / 60).toString().padStart(2,'0');
+                const sec = (seconds % 60).toString().padStart(2,'0');
+                timerEl.textContent = `${min}:${sec}`;
+            }, 1000);
+
+            // Start Recorders
+            Object.values(activeStreams).forEach(data => {
+                const chunks = [];
+                const recorder = new MediaRecorder(data.stream);
+                data.recorder = recorder;
+                
+                recorder.ondataavailable = e => { if(e.data.size > 0) chunks.push(e.data); };
+                recorder.onstop = () => {
+                    const blob = new Blob(chunks, {type: 'video/webm'});
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `NDUR_REC_${data.slot}_${Date.now()}.webm`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                };
+                recorder.start();
+            });
+
+            // Auto Stop
+            const duration = recordDurationSelect.value;
+            if(duration !== 'manual') {
+                setTimeout(stopRecording, parseInt(duration) * 1000);
             }
         }
 
-        function stopAllCameras() {
-            ['left', 'back', 'right'].forEach(pos => {
-                const vid = document.getElementById(`webcam-${pos}`);
-                if (vid.srcObject) {
-                    vid.srcObject.getTracks().forEach(track => track.stop());
-                    vid.srcObject = null;
+        function stopRecording() {
+            if(!isRecordingAll) return;
+            isRecordingAll = false;
+            recordAllButton.textContent = "Record All";
+            recordAllButton.classList.remove('animate-pulse');
+            document.getElementById('recording-timer-box').style.display = 'none';
+            clearInterval(timerInterval);
+
+            Object.values(activeStreams).forEach(data => {
+                if(data.recorder && data.recorder.state !== 'inactive') {
+                    data.recorder.stop();
                 }
             });
-            switchView('dashboard-section');
         }
-    </script>
 
+    </script>
 </body>
 </html>
