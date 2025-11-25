@@ -9,100 +9,211 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        ndurRed: '#ff0000',     
-                        ndurDarkRed: '#cc0000', 
-                    },
-                    fontFamily: {
-                        /* This ensures INTER is used everywhere */
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    boxShadow: {
-                        'glow': '0 4px 20px rgba(255, 0, 0, 0.4)',
-                        'glow-hover': '0 6px 25px rgba(255, 0, 0, 0.6)',
-                    }
-                }
-            }
-        }
-    </script>
-
     <style>
-        /* Custom CSS for Background Image */
-        .bg-custom {
+        /* --- 1. RESET & BASIC SETUP --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden; /* Prevents scrolling on the main page */
+        }
+
+        /* --- 2. BACKGROUND IMAGE --- */
+        body {
+            /* Make sure bg-app.jpg is in the same folder! */
             background-image: url('bg-app.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
+        /* --- 3. DARK OVERLAY --- */
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.75); /* Dark overlay to make text readable */
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Allows scrolling if content is too tall */
+        }
+
+        /* --- 4. NAVIGATION (Centered Logo) --- */
+        nav {
+            display: flex;
+            justify-content: center; /* Centers items horizontally */
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+
+        /* CONTROL THE LOGO SIZE HERE */
+        .logo-img {
+            height: 50px; /* Fixed height so it doesn't get huge */
+            width: auto;  /* Width adjusts automatically */
+            display: block;
+        }
+
+        /* --- 5. SECTIONS (Landing & Dashboard) --- */
+        .section-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* Utility Class to Hide Elements */
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- 6. LANDING PAGE TYPOGRAPHY --- */
+        h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: white;
+            line-height: 1;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        h1 span {
+            color: #ff0000; /* Red Color */
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: #ddd;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        /* --- 7. DASHBOARD FORM STYLES --- */
+        .dashboard-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            padding: 40px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            backdrop-filter: blur(10px);
+        }
+
+        h2 {
+            color: white;
+            font-size: 2rem;
+            text-transform: uppercase;
+            border-bottom: 3px solid #ff0000;
+            display: inline-block;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+        }
+
+        .form-label {
+            display: block;
+            text-align: left;
+            color: #ff0000;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #555;
+            border-radius: 4px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #ff0000;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* --- 8. BUTTONS --- */
+        .btn-red {
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+            transition: transform 0.2s, background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-red:hover {
+            background-color: #cc0000;
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            h1 { font-size: 3.5rem; }
+            .logo-img { height: 40px; }
+            .dashboard-box { padding: 20px; }
         }
     </style>
 </head>
-<body class="h-screen w-full overflow-hidden bg-custom bg-cover bg-center bg-fixed text-white font-sans">
+<body>
 
-    <div class="bg-black/80 h-full w-full flex flex-col overflow-y-auto">
-
-        <nav class="flex justify-center items-center py-6 border-b border-red-500/20 shrink-0">
-            <img src="white logo ndur small.png" alt="NDUR Logo" class="h-12 w-auto block">
+    <div class="overlay">
+        
+        <nav>
+            <img src="white logo ndur small.png" alt="NDUR Logo" class="logo-img">
         </nav>
 
-        <div id="landing-section" class="flex-1 flex flex-col justify-center items-center text-center p-5 w-full max-w-7xl mx-auto">
-            
-            <h1 class="text-5xl md:text-7xl font-black uppercase mb-4 leading-none tracking-tighter">
-                Push Your <br><span class="text-ndurRed">Limits</span>
-            </h1>
-            
-            <p class="text-xl md:text-2xl font-normal mb-10 text-gray-300 max-w-2xl leading-relaxed">
-                Track your Running Movement with NDÜR
-            </p>
-            
-            <button onclick="goToDashboard()" 
-                class="px-10 py-4 text-lg bg-ndurRed text-white font-extrabold uppercase rounded shadow-glow 
-                       hover:-translate-y-0.5 hover:bg-ndurDarkRed hover:shadow-glow-hover transition-all duration-200 tracking-wider">
-                Start Running
-            </button>
+        <div id="landing-section" class="section-container">
+            <h1>Push Your <br><span>Limits</span></h1>
+            <p class="subtitle">Track your Running Movement with NDÜR</p>
+            <button class="btn-red" onclick="goToDashboard()">Start Running</button>
         </div>
 
-        <div id="dashboard-section" class="hidden flex-1 flex flex-col justify-center items-center text-center p-5 w-full">
-            
-            <div class="bg-black/60 border border-red-500/30 p-8 rounded-lg w-full max-w-lg backdrop-blur-sm">
-                
-                <h2 class="text-2xl md:text-3xl uppercase mb-8 text-white border-b-2 border-ndurRed pb-2 inline-block font-bold">
-                    Dashboard
-                </h2>
-                
-                <p class="text-gray-400 text-sm uppercase tracking-widest mb-6">3 Side View of NDÜR</p>
+        <div id="dashboard-section" class="section-container hidden">
+            <div class="dashboard-box">
+                <h2>Dashboard</h2>
+                <p style="color: #aaa; margin-bottom: 20px; letter-spacing: 1px; text-transform: uppercase; font-size: 0.9rem;">
+                    3 Side View of NDÜR
+                </p>
 
                 <form onsubmit="event.preventDefault(); alert('Camera Setup Initializing...');">
                     
-                    <div class="mb-5 text-left">
-                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Subject Name</label>
-                        <input type="text" placeholder="Enter Full Name" required 
-                               class="w-full p-3 bg-white/10 border border-gray-600 text-white rounded focus:border-ndurRed focus:bg-white/20 outline-none transition duration-300">
-                    </div>
+                    <label class="form-label">Subject Name</label>
+                    <input type="text" class="form-input" placeholder="Enter Full Name" required>
 
-                    <div class="mb-5 text-left">
-                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">D.O.B</label>
-                        <input type="date" required 
-                               class="w-full p-3 bg-white/10 border border-gray-600 text-white rounded focus:border-ndurRed focus:bg-white/20 outline-none transition duration-300 placeholder-gray-400">
-                    </div>
+                    <label class="form-label">D.O.B</label>
+                    <input type="date" class="form-input" required>
 
-                    <div class="mb-5 text-left">
-                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Age</label>
-                        <input type="number" placeholder="25" required 
-                               class="w-full p-3 bg-white/10 border border-gray-600 text-white rounded focus:border-ndurRed focus:bg-white/20 outline-none transition duration-300">
-                    </div>
+                    <label class="form-label">Age</label>
+                    <input type="number" class="form-input" placeholder="25" required>
 
-                    <div class="mb-8 text-left">
-                        <label class="block text-ndurRed text-xs font-bold uppercase mb-1">Phone Number</label>
-                        <input type="tel" placeholder="+1 234 567 8900" required 
-                               class="w-full p-3 bg-white/10 border border-gray-600 text-white rounded focus:border-ndurRed focus:bg-white/20 outline-none transition duration-300">
-                    </div>
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-input" placeholder="+1 234 567 8900" required>
 
-                    <button type="submit" 
-                        class="w-full py-4 text-lg bg-ndurRed text-white font-extrabold uppercase rounded shadow-glow 
-                               hover:-translate-y-0.5 hover:bg-ndurDarkRed hover:shadow-glow-hover transition-all duration-200 tracking-wider">
+                    <br><br>
+                    <button type="submit" class="btn-red" style="width: 100%;">
                         Setup Camera View to Run
                     </button>
                 </form>
@@ -113,11 +224,10 @@
 
     <script>
         function goToDashboard() {
-            const landing = document.getElementById('landing-section');
-            const dashboard = document.getElementById('dashboard-section');
-
-            landing.classList.add('hidden');
-            dashboard.classList.remove('hidden');
+            // Hide the Landing Section
+            document.getElementById('landing-section').classList.add('hidden');
+            // Show the Dashboard Section
+            document.getElementById('dashboard-section').classList.remove('hidden');
         }
     </script>
 
